@@ -1,6 +1,6 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.4'
-    id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+    id 'org.springframework.boot' version '2.4.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
 }
 
@@ -17,28 +17,29 @@ configurations {
 repositories {
     mavenCentral()
 }
-
-ext {
-    set('testcontainersVersion', "1.17.4")
+compileJava {
+    options.compilerArgs = ['-Amapstruct.defaultComponentModel=spring', '-Amapstruct.unmappedTargetPolicy=IGNORE']
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa' //Работа с базой банных и преобрахзование в объекты в java
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.flywaydb:flyway-core' //Миграция базы данных
-    implementation "org.mapstruct:mapstruct:1.4.1.Final" //Работа с преобразованием из одного класса в другой
-    compileOnly 'org.projectlombok:lombok' //помогает писать код за тебя
-    runtimeOnly 'org.postgresql:postgresql' // драйвер для постргреса
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.testcontainers:junit-jupiter'
-    testImplementation 'org.testcontainers:postgresql'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.1.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    implementation "org.flywaydb:flyway-core"
+
+    testCompileOnly 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 dependencyManagement {
     imports {
-        mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2020.0.2"
     }
 }
 
